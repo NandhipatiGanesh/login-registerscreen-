@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <title>crazy login screen</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+
+/*=============== VARIABLES CSS ===============*/
+:root {
+    /*========== Colors ==========*/
+    /*Color mode HSL(hue, saturation, lightness)*/
+    --first-color: hsl(208, 92%, 54%);
+    --first-color-alt: hsl(208, 88%, 50%);
+    --title-color: hsl(220, 68%, 4%);
+    --white-color: hsl(0, 0%, 100%);
+    --text-color: hsl(220, 15%, 66%);
+    --body-color: hsl(0, 0%, 100%);
+    --container-color: hsl(220, 50%, 97%);
+  
+    /*========== Font and typography ==========*/
+    /*.5rem = 8px | 1rem = 16px ...*/
+    --body-font: "Montserrat", system-ui;
+    --big-font-size: 1rem;
+    --normal-font-size: .938rem;
+    --small-font-size: .813rem;
+    --tiny-font-size: .688rem;
+  
+    /*========== Font weight ==========*/
+    --font-regular: 400;
+    --font-medium: 500;
+    --font-semi-bold: 600;
+  
+    /*========== z index ==========*/
+    --z-tooltip: 10;
+    --z-fixed: 100;
+  }
+  
+  /*========== Responsive typography ==========*/
+  @media screen and (min-width: 1150px) {
+    :root {
+      --big-font-size: 3rem;
+      --normal-font-size: 1rem;
+      --small-font-size: .875rem;
+      --tiny-font-size: .75rem;
+    }
+  }
+body {
+    font-family: 'DM Sans', sans-serif;
+}
+
+    * {
+        box-sizing: border-box;
+      }
+      .video-div{
+        border-radius: 3rem;
+        overflow: hidden;
+      }
+      /*=============== REUSABLE CSS CLASSES ===============*/
+.container {
+    max-width: 1120px;
+    margin-inline: 1.5rem;
+  }
+  
+  .grid {
+    display: grid;
+    gap: 1rem;
+  }
+  
+  /*=============== LOGIN  ===============*/
+  .login {
+    position: relative;
+    height: 100vh;
+    align-items: center;
+    overflow: hidden;
+  }
+  
+  .login__blob {
+    display: none;
+  }
+  
+  .login__title {
+    font-size: var(--big-font-size);
+    color: var(--title-color);
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .login__box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: var(--container-color);
+    border-radius: 1rem;
+  }
+  
+  .login__input {
+    background: none;
+    width: 100%;
+    padding: 1.5rem 2.5rem 1.5rem 1.25rem;
+    font-weight: var(--font-semi-bold);
+    border: 3px solid transparent;
+    border-radius: 1rem;
+    z-index: 1;
+    transition: border-color .4s;
+  }
+  
+  .login__input:autofill {
+    transition: background-color 6000s, color 6000s;
+  }
+  
+  .login__label {
+    position: absolute;
+    left: 1.25rem;
+    font-weight: var(--font-semi-bold);
+    transition: transform .4s, font-size .4s, color .4s;
+  }
+  
+  .login__icon {
+    position: absolute;
+    right: 1rem;
+    font-size: 1.25rem;
+    transition: color .4s;
+  }
+  
+  .login__password {
+    cursor: pointer;
+    z-index: 10;
+  }
+  
+  .login__forgot {
+    display: block;
+    width: max-content;
+    margin: 1rem 0 0 auto;
+    font-size: var(--small-font-size);
+    font-weight: var(--font-semi-bold);
+    color: var(--text-color);
+    transition: color .4s;
+  }
+  
+  .login__forgot:hover {
+    color: var(--first-color);
+  }
+  
+  .login__button {
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+    background-color: var(--first-color);
+    color: var(--white-color);
+    font-weight: var(--font-semi-bold);
+    padding-block: 1.5rem;
+    border-radius: 4rem;
+    margin-block: 2rem;
+    cursor: pointer;
+    transition: background-color .4s, box-shadow .4s;
+  }
+  
+  .login__button:hover {
+    background-color: var(--first-color-alt);
+    box-shadow: 0 8px 24px hsla(208, 92%, 32%, .3);
+  }
+  
+  .login__social {
+    margin-bottom: 2rem;
+  }
+  
+  .login__social-title {
+    text-align: center;
+    font-size: var(--small-font-size);
+    font-weight: var(--font-semi-bold);
+    color: var(--title-color);
+    margin-bottom: 1rem;
+  }
+  
+  .login__social-img {
+    width: 1rem;
+  }
+  
+  .login__social-links {
+    display: flex;
+    justify-content: center;
+    column-gap: 1.5rem;
+  }
+  
+  .login__social-link {
+    width: 32px;
+    height: 32px;
+    background-color: var(--body-color);
+    box-shadow: 0 4px 8px hsla(0, 0%, 0%, .1);
+    border-radius: .5rem;
+    display: grid;
+    place-items: center;
+    transition: transform .4s;
+  }
+  
+  .login__social-link:hover {
+    transform: translateY(-.25rem);
+  }
+  
+  .login__switch {
+    text-align: center;
+    font-size: var(--small-font-size);
+  }
+  
+  .login__switch button {
+    background: none;
+    color: var(--first-color);
+    font-size: var(--small-font-size);
+    font-weight: var(--font-semi-bold);
+    cursor: pointer;
+    transition: color .4s;
+  }
+  
+  .login__switch button:hover {
+    color: var(--first-color-alt);
+  }
+  
+  .login__access, 
+  .login__register {
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+    transition: transform .4s, opacity .4s .1s;
+  }
+  
+  .login__register {
+    transform: translateX(15rem);
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  /* Input focus move up label */
+  .login__input:focus ~ .login__label {
+    transform: translateY(-12px);
+    font-size: var(--tiny-font-size);
+  }
+  
+  .login__input:focus {
+    padding-block: 2rem 1rem;
+  }
+  
+  /* Input focus sticky top label */
+  .login__input:not(:placeholder-shown).login__input:not(:focus) ~ .login__label {
+    transform: translateY(-12px);
+    font-size: var(--tiny-font-size);
+  }
+  
+  .login__input:not(:placeholder-shown).login__input:not(:focus) {
+    padding-block: 2rem 1rem;
+  }
+  
+  /* Input focus color */
+  .login__input:focus {
+    border-color: var(--first-color);
+  }
+  
+  .login__input:focus ~ .login__label,
+  .login__input:focus ~ .login__icon {
+    color: var(--first-color);
+  }
+  
+  /* Show hide login & create account */
+  .active .login__access {
+    transform: translateX(15rem);
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  .active .login__register {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: initial;
+  }
+  
+  /*=============== BREAKPOINTS ===============*/
+  /* For small devices */
+  @media screen and (max-width: 320px) {
+    .container {
+      margin-inline: 1rem;
+    }
+  }
+  
+  /* For medium devices */
+  @media screen and (min-width: 540px) {
+    .login__area {
+      width: 380px;
+      margin-inline: auto;
+    }
+  }
+  
+  @media screen and (min-width: 350px) and (max-height: 600px) {
+    .login {
+      height: 760px;
+    }
+  }
+  
+  /* For large devices */
+  @media screen and (min-width: 1150px) {
+    .container {
+      margin-inline: auto;
+    }
+  
+    .login__area {
+      width: 460px;
+      margin: initial;
+    }
+    .login__access, 
+    .login__register {
+      width: 600px;
+    }
+    .login__title {
+      text-align: initial;
+      margin-bottom: 3rem;
+    }
+    .login__button {
+      margin-bottom: 3rem;
+    }
+    .login__group {
+      grid-template-columns: repeat(2, 1fr);
+    }
+}
+</style>
+</head>
+<body class="m-0 p-0">
+<section class="bg-white-1000 w-[100%] h-[100vh] flex justify-center items-center gap-x-[70px]">
+<div class="flex justify-between items-stretch h-[95vh] w-[100%] px-[20px] gap-x-[70px]" >
+    <div style="width: 50%; height: 95vh;" class="my-auto video-div " >
+        <iframe 
+            src="https://my.spline.design/untitled-e0e807542552f95e92e67ab9e1801788/" 
+            frameborder="0" 
+            width="100%" 
+            height="100%" 
+            allowfullscreen>
+        </iframe>
+    </div>
+    
+    <div class="flex items-center w-[50%]">
+         <!--=============== LOGIN ===============-->
+      <div class="login container grid" id="loginAccessRegister">
+        <!--===== LOGIN ACCESS =====-->
+        <div class="login__access">
+           <h1 class="login__title">Log in to your account.</h1>
+           
+           <div class="login__area">
+              <form action="" class="login__form">
+                 <div class="login__content grid">
+                    <div class="login__box">
+                       <input type="email" id="email" required placeholder=" " class="login__input">
+                       <label for="email" class="login__label">Email</label>
+           
+                       <i class="ri-mail-fill login__icon"></i>
+                    </div>
+        
+                    <div class="login__box">
+                       <input type="password" id="password" required placeholder=" " class="login__input">
+                       <label for="password" class="login__label">Password</label>
+           
+                       <i class="ri-eye-off-fill login__icon login__password" id="loginPassword"></i>
+                    </div>
+                 </div>
+        
+                 <a href="#" class="login__forgot">Forgot your password?</a>
+        
+                 <button type="submit" class="login__button">Login</button>
+              </form>
+     
+              <div class="login__social">
+                 <p class="login__social-title">Or login with</p>
+     
+                 <div class="login__social-links">
+                    <a href="#" class="login__social-link">
+                       <img src="data:image/png;base64,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" alt="image" class="login__social-img">
+                    </a>
+     
+                    <a href="#" class="login__social-link">
+                       <img src="https://cdn-icons-png.freepik.com/256/15047/15047435.png?semt=ais_hybrid" alt="image" class="login__social-img">
+                    </a>
+     
+                    <a href="#" class="login__social-link">
+                       <img src="data:image/png;base64,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" alt="image" class="login__social-img">
+                    </a>
+                 </div>
+              </div>
+     
+              <p class="login__switch">
+                 Don't have an account? 
+                 <button id="loginButtonRegister">Create Account</button>
+              </p>
+           </div>
+        </div>
+
+        <!--===== LOGIN REGISTER =====-->
+        <div class="login__register">
+           <h1 class="login__title">Create new account.</h1>
+
+           <div class="login__area">
+              <form action="" class="login__form">
+                 <div class="login__content grid">
+                    <div class="login__group grid">
+                       <div class="login__box">
+                          <input type="text" id="names" required placeholder=" " class="login__input">
+                          <label for="names" class="login__label">Names</label>
+     
+                          <i class="ri-id-card-fill login__icon"></i>
+                       </div>
+     
+                       <div class="login__box">
+                          <input type="text" id="surnames" required placeholder=" " class="login__input">
+                          <label for="surnames" class="login__label">Surnames</label>
+     
+                          <i class="ri-id-card-fill login__icon"></i>
+                       </div>
+                    </div>
+  
+                    <div class="login__box">
+                       <input type="email" id="emailCreate" required placeholder=" " class="login__input">
+                       <label for="emailCreate" class="login__label">Email</label>
+  
+                       <i class="ri-mail-fill login__icon"></i>
+                    </div>
+  
+                    <div class="login__box">
+                       <input type="password" id="passwordCreate" required placeholder=" " class="login__input">
+                       <label for="passwordCreate" class="login__label">Password</label>
+  
+                       <i class="ri-eye-off-fill login__icon login__password" id="loginPasswordCreate"></i>
+                    </div>
+                 </div>
+  
+                 <button type="submit" class="login__button">Create account</button>
+              </form>
+  
+              <p class="login__switch">
+                 Already have an account? 
+                 <button id="loginButtonAccess">Log In</button>
+              </p>
+           </div>
+        </div>
+     </div>
+    </div>
+</div>
+</section>
+<script >
+      
+    /*=============== SHOW HIDE PASSWORD LOGIN ===============*/
+const passwordAccess = (loginPass, loginEye) =>{
+ const input = document.getElementById(loginPass),
+       iconEye = document.getElementById(loginEye)
+
+ iconEye.addEventListener('click', () =>{
+    // Change password to text
+    input.type === 'password' ? input.type = 'text'
+                                    : input.type = 'password'
+
+    // Icon change
+    iconEye.classList.toggle('ri-eye-fill')
+    iconEye.classList.toggle('ri-eye-off-fill')
+ })
+}
+passwordAccess('password','loginPassword')
+
+/*=============== SHOW HIDE PASSWORD CREATE ACCOUNT ===============*/
+const passwordRegister = (loginPass, loginEye) =>{
+ const input = document.getElementById(loginPass),
+       iconEye = document.getElementById(loginEye)
+
+ iconEye.addEventListener('click', () =>{
+    // Change password to text
+    input.type === 'password' ? input.type = 'text'
+                                    : input.type = 'password'
+
+    // Icon change
+    iconEye.classList.toggle('ri-eye-fill')
+    iconEye.classList.toggle('ri-eye-off-fill')
+ })
+}
+passwordRegister('passwordCreate','loginPasswordCreate')
+
+/*=============== SHOW HIDE LOGIN & CREATE ACCOUNT ===============*/
+const loginAcessRegister = document.getElementById('loginAccessRegister'),
+    buttonRegister = document.getElementById('loginButtonRegister'),
+    buttonAccess = document.getElementById('loginButtonAccess')
+
+buttonRegister.addEventListener('click', () => {
+ loginAcessRegister.classList.add('active')
+})
+
+buttonAccess.addEventListener('click', () => {
+ loginAcessRegister.classList.remove('active')
+})
+    </script>
+</body>
+</html>
